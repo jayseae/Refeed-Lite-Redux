@@ -1,0 +1,115 @@
+<script type="text/javascript">
+<!--
+var refeed_num_conn = <mt:var name="feed_count">;
+
+function refeed_add_connection() {
+    refeed_num_conn++;
+    var tbody = getByID("refeed_connection_loop");
+    var tr = document.createElement("tr");
+    tr.id = "refeed_connection-" + refeed_num_conn;
+    tbody.appendChild(tr);
+    var td1 = document.createElement("td");
+    td1.innerHTML = "<input type=\"text\" id=\"refeed_uri_" + refeed_num_conn + "\" name=\"refeed_uri_" + refeed_num_conn + "\" style=\"width: 100%\" />";
+    tr.appendChild(td1);
+    var td2 = document.createElement("td");
+    // td2.innerHTML = "<input type=\"text\" name=\"refeed_category_" + refeed_num_conn + "\" style=\"width: 100%\" />";
+    td2.innerHTML = "<select name=\"refeed_category_" + refeed_num_conn + "\" style=\"width: 100%\" /><mt:var name="category_loop" encode_js="1"></select>";
+    tr.appendChild(td2);
+    var td3 = document.createElement("td");
+    // td3.innerHTML = "<input type=\"text\" name=\"refeed_author_" + refeed_num_conn + "\" style=\"width: 100%\" />";
+    td3.innerHTML = "<select name=\"refeed_author_" + refeed_num_conn + "\" style=\"width: 100%\" /><mt:var name="author_loop" encode_js="1"></select>";
+    tr.appendChild(td3);
+    var td4 = document.createElement("td");
+    td4.innerHTML = "<a href=\"#\" onclick=\"return refeed_remove_connection(" + refeed_num_conn + ")\"><img src=\"<mt:var name="static_uri">images/nav_icons/mini/delete.gif\" width=\"9\" height=\"11\" alt=\"<MT_TRANS phrase="Delete">\" /></a>";
+    tr.appendChild(td4);
+    var name = getByID("feed_uri_" + refeed_num_conn);
+    if (name) name.focus();
+}
+function refeed_remove_connection(num) {
+    var tr = getByID("refeed_connection-" + num);
+    if (tr) {
+        var uri = getByID("refeed_uri_" + num);
+        uri.value = "";
+        TC.addClassName(tr, "hidden");
+    }
+    return false;
+}
+// -->
+</script>
+
+<div class="field field-left-label pkg">
+    <div class="field-inner">
+        <div class="field-header">
+            <label for="connection_loop"><__trans phrase="Refeed Connections"></label>
+        </div>
+        <div class="field-content">
+            <p class="hint"><__trans phrase="You can define your feeds for publishing here.  The URI is required.  If you include a category or author, they will be used.  If not, the default values will be used instead.  To add a new row, click the Add button.  To delete a row that you no longer want, click the trashcan button at the end of the row.  Remember to save your changes when you are finished."></p>
+            <div id="actions-bar-top" class="actions-bar actions-bar-top" style="display:inline !important;">
+                <div class="actions-bar-inner pkg">
+                    <span class="button-actions actions">
+                        <a href="javascript:void(0)" onclick="refeed_add_connection()">Add</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="listing">
+    <table cellspacing="0" id="refeed_connection_table" width="100%">
+        <thead>
+            <tr>
+                <th width="59%">URI</th>
+                <th width="25%">Category</th>
+                <th width="15%">Author</th>
+                <th width="9">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody id="refeed_connection_loop">
+            <mt:loop name="connection_loop">
+                <tr id="refeed_connection-<mt:var name="num">">
+                    <td><input id="refeed_uri_<mt:var name="num">" name="refeed_uri_<mt:var name="num">" type="text" value="<mt:var name="uri">" style="width: 100%" /></td>
+                    <td><select name="refeed_category_<mt:var name="num">" style="width: 100%" ><mt:var name="categories"></select></td>
+                    <td><select name="refeed_author_<mt:var name="num">" style="width: 100%" ><mt:var name="authors"></select></td>
+                    <td><a href="#" onclick="return refeed_remove_connection(<mt:var name="num">); return false;"><img src="<mt:var name="static_uri">images/nav_icons/mini/delete.gif" width="9" height="11" alt="<MT_TRANS phrase="Delete">" /></a></td>
+                </tr>
+            </mt:loop>
+        </tbody>
+    </table>
+</div>
+
+<div class="field field-left-label pkg">
+    <div class="field-inner">
+        <div class="field-content">
+            <p class="hint" style="margin-top:1em;"><__trans phrase="The category and author should be spelled correctly - including the case as well as any spaces and punctuation - in order to correctly map to the right place.  If you're having problems getting things created to the right author or category, that's a good place to check.  Also take a look in your activity log for any messages that might be created."></p>
+        </div>
+    </div>
+</div>
+
+<div class="field field-left-label pkg">
+    <div class="field-inner">
+        <div class="field-header">
+            <label for="refeed_category"><__trans phrase="Default Category"></label>
+        </div>
+        <div class="field-content">
+            <select id="refeed_category" name="refeed_category">
+                <mt:var name="category_loop">
+            </select>
+            <p class="hint" style="margin-top:1em;"><__trans phrase="The default category will only be used in the event that a category can't be used - either the category you specified wasn't correct, or you didn't specify one on the feed in the first place."></p>
+        </div>
+    </div>
+</div>
+
+<div class="field field-left-label pkg">
+    <div class="field-inner">
+        <div class="field-header">
+            <label for="refeed_author"><__trans phrase="Default Author"></label>
+        </div>
+        <div class="field-content">
+            <select id="refeed_author" name="refeed_author">
+                <mt:var name="author_loop">
+            </select>
+            <p class="hint" style="margin-top:1em;"><__trans phrase="The default author will only be used in the event that an author can't be used - either the specified author wasn't valid, or one wasn't included on the feed in the first place."></p>
+        </div>
+    </div>
+</div>
